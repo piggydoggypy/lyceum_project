@@ -17,7 +17,9 @@ login_manager.init_app(app)
 
 
 # Повторить пароль в форме регистрации
-# Добавить кнопку удалить пользователя в личном кабинете
+# Сделать поиск вакансий
+# Сделать отклики на вакансии
+# Сделать navbar
 
 
 @login_manager.user_loader
@@ -91,7 +93,6 @@ def login():
 def profile():
     form = LoginForm()
     all_vac = current_user.vacancy
-    print(all_vac)
     return render_template('profile.html', title='Личный кабинет', sec_title='Личный кабинет', form=form,
                            sp=all_vac)
 
@@ -134,11 +135,20 @@ def delete_user(name):
     return 'заглушккккккккк remove_profile'
 
 
-@app.route('/remove_vacancy/<name>', methods=['GET', 'POST'])
+@app.route('/remove_vacancy/<id>', methods=['POST', 'GET'])
 @login_required
-def delete_vacancy(name):
-    # Сделать проверку на пользователя
-    return 'заглушккккккккк remove_vacancy'
+def delete_vacancy(id):
+
+    db_sess = db_session.create_session()
+    vacancy = db_sess.query(Vacancy).filter(Vacancy.id == id).first()
+    if current_user.is_employer and current_user.id == vacancy.user.id:
+        print(vacancy)
+        db_sess.delete(vacancy)
+        db_sess.commit()
+        return redirect('/profile')
+    return 'Недостаточно прав!'
+
+
 
 
 @app.route('/change_vacancy/<id>', methods=['GET', 'POST'])

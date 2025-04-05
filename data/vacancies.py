@@ -15,5 +15,5 @@ class Vacancy(SqlAlchemyBase):
                                 sqlalchemy.ForeignKey("users.id"))
     user = orm.relationship('User')
 
-    # def __repr__(self):
-    #     return f'<Vacancy> id:{self.id} title:{self.title} content:{self.content}'
+    def __repr__(self):
+        return f'<Vacancy> id:{self.id} title:{self.title} content:{self.content}'
