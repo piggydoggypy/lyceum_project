@@ -1,0 +1,30 @@
+{% extends "reg.html" %}
+{% block content %}
+<div class="d-flex justify-content-center">
+    <form action="" method="post" novalidate class="text-center" style="width: 100%; max-width: 500px;">
+        {{ form.hidden_tag() }}
+        {% if message %}
+        <div class="alert alert-danger" role="alert">
+            <strong>{{ message }}</strong>
+        </div>
+        {% endif %}
+
+        <div class="row justify-content-center mb-4">
+            <div class="col-5 mb-3 mb-md-0">
+                {{ form.email(class="form-control", placeholder="Почта") }}
+            </div>
+            <div class="col-5">
+                {{ form.password(class="form-control", placeholder="Пароль") }}
+            </div>
+        </div>
+        <div class="mb-3">
+            {{ form.remember_me(class="form-check-input") }}
+            {{ form.remember_me.label(class="form-check-label") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.submit(type="submit", class="btn btn-dark btn-lg") }}
+        </div>
+    </form>
+</div>
+{% endblock %}

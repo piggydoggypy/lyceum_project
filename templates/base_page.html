@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+          crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" href="static/css/style.css">
+    <title>{{ title }}</title>
+
+</head>
+<body class="d-flex flex-column min-vh-100 justify-content-center align-items-center">
+<form action="" method="post" novalidate class="search-container">
+    {{ form.hidden_tag() }}
+    {% if current_user.is_authenticated %}
+
+    <div class="auth-buttons">
+        {{ current_user.login }}
+        {{ form.profile_btn(type="submit", class="btn btn-outline-dark") }}
+        {{ form.logout_btn(type="submit", class="btn btn-dark") }}
+    </div>
+    {% else %}
+    <div class="auth-buttons">
+        {{ form.login(type="submit", class="btn btn-dark") }}
+        {{ form.registration(type="submit", class="btn btn-dark") }}
+    </div>
+    {% endif %}
+
+    <div class="input-group">
+        {{ form.search(class="form-control form-control-lg", placeholder="Поиск") }}
+        {{ form.search_btn(type="submit", class="btn btn-dark btn-lg") }}
+    </div>
+</form>
+</body>
+</html>

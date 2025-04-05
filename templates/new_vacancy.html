@@ -1,0 +1,20 @@
+{% extends "reg.html" %}
+
+{% block content %}
+<form action="" method="post" novalidate class="text-center">
+    {{ form.hidden_tag() }}
+    {% if error %}
+    <div class="alert alert-danger" role="alert">
+        <strong>{{ error }}</strong>
+    </div>
+    {% endif %}
+    <div class="row mb-6">
+        <div class="col-3 mb-3">{{ form.title(class="form-control", placeholder="Название вакансии") }}</div>
+    </div>
+    <div class="mb-3">{{ form.content(class="form-control", placeholder="О вакансии") }}</div>
+    <div>
+        {{ form.submit(type="submit", class="btn btn-dark") }}
+    </div>
+</form>
+
+{% endblock %}

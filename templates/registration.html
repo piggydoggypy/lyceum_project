@@ -1,0 +1,29 @@
+{% extends "reg.html" %}
+
+{% block content %}
+<form action="" method="post" novalidate class="text-center">
+    {{ form.hidden_tag() }}
+    {% if error %}
+    <div class="alert alert-danger" role="alert">
+        <strong>{{ error }}</strong>
+    </div>
+    {% endif %}
+    <div class="row mb-6">
+        <div class="col-3 mb-3">{{ form.name(class="form-control", placeholder="Название компании/ФИО") }}</div>
+        <div class="col-3 mb-3">{{ form.email(class="form-control", placeholder="Почта") }}</div>
+        <div class="col-3 mb-3">{{ form.login(class="form-control" , placeholder="Логин") }}</div>
+        <div class="col-3 mb-3">{{ form.password(class="form-control" , placeholder="Пароль") }}</div>
+        <div class="col-3 mb-3">{{ form.telephone(class="form-control" , placeholder="Телефон") }}</div>
+    </div>
+    <div class="mb-3">{{ form.description(class="form-control", placeholder="О компании/О себе") }}</div>
+    <div class="mb-3">{{ form.is_employer(class="form-check-input") }} {{
+        form.is_employer.label(class="form-check-label") }}
+        <div class="mb-3">{{ form.remember_me(class="form-check-input") }} {{
+            form.remember_me.label(class="form-check-label") }}
+        </div>
+        <div>
+            {{ form.submit(type="submit", class="btn btn-dark") }}
+        </div>
+    </div>
+</form>
+{% endblock %}

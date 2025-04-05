@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+          crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" href="static/css/style.css">
+    <title>{{ title }}</title>
+    <style>
+        html, body {
+            height: 100%;
+        }
+        .profile-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .vacancy-card {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            min-height: fit-content; /* Минимальная высота по содержимому */
+            height: auto; /* Автоматическая высота */
+        }
+        .vacancy-content {
+            flex-grow: 1; /* Растягиваем контент на доступное пространство */
+            word-wrap: break-word; /* Перенос длинных слов */
+            overflow-wrap: break-word; /* Альтернативный вариант переноса */
+        }
+        .vacancy-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        .vacancy-footer {
+            margin-top: 15px;
+            color: #6c757d;
+            font-size: 0.9em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .btn-alert {
+            background-color: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+        .btn-warning {
+            background-color: #ffc107;
+            color: #212529;
+            border-color: #ffc107;
+        }
+    </style>
+</head>
+<body class="text-center">
+<div class="container my-5">
+    <h1 class="text-center mb-4">{{sec_title}}</h1>
+
+    <!-- Профиль пользователя -->
+    <div class="profile-container">
+        <img src="{{current_user.profile_image}}" class="profile-image">
+        <div class="profile-info text-start">
+            <h3>{{current_user.name}}</h3>
+            <div class="mb-2">
+                <span class="text-muted">{{current_user.login}}</span><br>
+                <span class="text-muted">{{current_user.telephone}}</span>
+            </div>
+            <h5>{{current_user.email}}</h5>
+        </div>
+    </div>
+
+    <div class="btn-container">
+        <a href="/change_profile/{{current_user.id}}" class="btn btn-dark">Изменить профиль</a>
+        <a href="/new_vacancy" class="btn btn-dark">Добавить вакансию</a>
+        <a href="/" class="btn btn-dark">На главную</a>
+        <a href="/remove_profile/{{current_user.name}}" class="btn btn-alert">Удалить аккаунт</a>
+    </div>
+
+    <!-- Список вакансий -->
+    <div class="mt-5">
+        <h2 class="mb-4">Мои вакансии</h2>
+        {% if sp %}
+        {% for vacancy in sp %}
+        <div class="vacancy-card">
+            <div class="vacancy-header">
+                <h4 class="mb-0">{{vacancy.title}}</h4>
+                <span class="text-muted">Автор: {{vacancy.user.name}}</span>
+            </div>
+            <div class="vacancy-content mt-3">
+                {{vacancy.content}}
+            </div>
+            <div class="vacancy-footer">
+                <div>
+                    {{vacancy.user.email}} | {{vacancy.user.telephone}}
+                </div>
+                <div>
+                    <a href="/remove_vacancy/{{vacancy.id}}" class="btn btn-alert">Удалить вакансию</a>
+                    <a href="/change_vacancy/{{vacancy.id}}" class="btn btn-warning">Изменить вакансию</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="alert alert-info">У вас пока нет вакансий</div>
+        {% endif %}
+    </div>
+</div>
+</body>
+</html>
