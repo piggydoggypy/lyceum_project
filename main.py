@@ -107,6 +107,7 @@ def logout():
 @app.route('/change_profile/<name>', methods=['GET', 'POST'])
 @login_required
 def change_profile(name):
+    pass
     # Сделать проверку на пользователя current_user.name == name
     return 'заглушккккккккк change_profile'
 
@@ -128,17 +129,27 @@ def new_vacancy():
     return render_template('new_vacancy.html', form=form, title='Добавление вакансии', sec_title='Добавление вакансии')
 
 
-@app.route('/remove_profile/<name>', methods=['GET', 'POST'])
+@app.route('/remove_profile/<id>', methods=['GET', 'POST'])
 @login_required
-def delete_user(name):
-    # Сделать проверку на пользователя current_user.name == name
-    return 'заглушккккккккк remove_profile'
+def delete_user(id):
+    pass
+    db_sess = db_session.create_session()
+
+    if current_user.id == int(id):
+        user = db_sess.query(User).filter(User.id == current_user.id).first()
+        logout_user()
+        vacancy = user.vacancy
+        for el in vacancy:
+            db_sess.delete(el)
+        db_sess.delete(user)
+        db_sess.commit()
+        return redirect('/')
+    return 'Недостаточно прав!'
 
 
 @app.route('/remove_vacancy/<id>', methods=['POST', 'GET'])
 @login_required
 def delete_vacancy(id):
-
     db_sess = db_session.create_session()
     vacancy = db_sess.query(Vacancy).filter(Vacancy.id == id).first()
     if current_user.is_employer and current_user.id == vacancy.user.id:
