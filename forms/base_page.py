@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired
 
 
 class base_page(FlaskForm):
-    search = EmailField()
+    search = StringField()
     profile_btn = SubmitField('Мой профиль')
     logout_btn = SubmitField('Выйти из аккаунта')
     search_btn = SubmitField('Найти')

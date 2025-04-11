@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, request, abort
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from datetime import datetime as dt
 
@@ -17,17 +17,23 @@ login_manager.init_app(app)
 
 
 # Повторить пароль в форме регистрации
-# Сделать поиск вакансий
+# Сделать загрузку фото
 # Сделать отклики на вакансии
+# Сделать изменение вакансий
 # Сделать navbar
+# Пофиксить баг с css на странице изменнения вакансии
+# Сделать просмотр профилей
+# Добавить в поиск вакансий поиск компаний
+# Сделать общую страницу ошибки
 
-
+# Работает
 @login_manager.user_loader
 def load_user(user_id):
     db_sess = db_session.create_session()
     return db_sess.query(User).get(user_id)
 
 
+# Работает
 @app.route('/', methods=['GET', 'POST'])
 def default_page():
     form = base_page()
@@ -40,23 +46,29 @@ def default_page():
         return redirect('/logout')
     elif data['profile_btn']:
         return redirect('/profile')
-
+    elif data['search_btn'] and data['search'] != '':
+        return redirect(f'/search/{data["search"]}')
+    elif data['search_btn']:
+        return render_template('base_page.html', title='Главная страница', form=form, error='Пустое поле ввода')
     return render_template('base_page.html', title='Главная страница', form=form)
 
 
-# Страница регистрации работодателя
+# Работает
+# Страница регистрации 
 @app.route('/registration', methods=['GET', 'POST'])
 def reg():
     form = registerForm()
     if form.validate_on_submit():
         db_sess = db_session.create_session()
-        # ПРОВЕРКА ПО ДАННЫМ В БД !!!!!!!!!!!!!!!!!
-        # if db_sess.query(Company).filter(Company.email == form.company_email.data).first() or \
-        #         db_sess.query(User).filter(User.email == form.company_email.data).first():
-        #     return render_template('registration.html', title='Регистрация работодателя', \
-        #                            sec_title='Регистрация работодателя', error='Данный email уже занят', \
-        #                            form=form)
-        print(form.data)
+        if db_sess.query(User).filter(User.email == form.email.data).first():
+            return render_template('registration.html', title='Регистрация работодателя', \
+                                   sec_title='Регистрация работодателя', error='Данный email уже занят', \
+                                   form=form)
+        if '@' not in form.email.data:
+            return render_template('registration.html', title='Регистрация работодателя', \
+                                   sec_title='Регистрация работодателя', error='Неправильный формат почты', \
+                                   form=form)
+
         user = User(login=form.login.data,
                     name=form.name.data,
                     description=form.description.data,
@@ -72,6 +84,7 @@ def reg():
                            sec_title='Регистрация', form=form)
 
 
+# Работает
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -88,6 +101,7 @@ def login():
     return render_template('login.html', title='Авторизация', sec_title='Авторизация', form=form)
 
 
+# Работает
 @app.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
@@ -97,6 +111,7 @@ def profile():
                            sp=all_vac)
 
 
+# Работает
 @app.route('/logout')
 @login_required
 def logout():
@@ -104,6 +119,7 @@ def logout():
     return redirect("/")
 
 
+# Не работает
 @app.route('/change_profile/<name>', methods=['GET', 'POST'])
 @login_required
 def change_profile(name):
@@ -112,14 +128,14 @@ def change_profile(name):
     return 'заглушккккккккк change_profile'
 
 
+# Работает
 @app.route('/new_vacancy', methods=['GET', 'POST'])
 @login_required
 def new_vacancy():
     form = NewVacancy()
     if form.validate_on_submit():
         if not current_user.is_employer:
-            return render_template('new_vacancy.html', form=form, title='Добавление вакансии',
-                                   sec_title='Добавление вакансии', error='Вы не являетесь работодателем!')
+            return 'Вы не являетесь работодателем!'
         vacancy = Vacancy(title=form.title.data, content=form.content.data)
         db_sess = db_session.create_session()
         user = db_sess.query(User).filter(User.id == current_user.id).first()
@@ -129,6 +145,7 @@ def new_vacancy():
     return render_template('new_vacancy.html', form=form, title='Добавление вакансии', sec_title='Добавление вакансии')
 
 
+# Работает
 @app.route('/remove_profile/<id>', methods=['GET', 'POST'])
 @login_required
 def delete_user(id):
@@ -147,34 +164,66 @@ def delete_user(id):
     return 'Недостаточно прав!'
 
 
+# Работает
 @app.route('/remove_vacancy/<id>', methods=['POST', 'GET'])
 @login_required
 def delete_vacancy(id):
     db_sess = db_session.create_session()
     vacancy = db_sess.query(Vacancy).filter(Vacancy.id == id).first()
-    if current_user.is_employer and current_user.id == vacancy.user.id:
-        print(vacancy)
-        db_sess.delete(vacancy)
-        db_sess.commit()
-        return redirect('/profile')
-    return 'Недостаточно прав!'
+    if vacancy:
+        if current_user.is_employer and current_user.id == vacancy.user.id:
+            db_sess.delete(vacancy)
+            db_sess.commit()
+            return redirect('/profile')
+        return 'Недостаточно прав!'
+    else:
+        abort(404)
 
 
-
-
+# Не работает
 @app.route('/change_vacancy/<id>', methods=['GET', 'POST'])
 @login_required
 def change_vacancy(id):
-    # Сделать проверку на пользователя
-    return 'заглушккккккккк change_vacancy'
+    form = NewVacancy()
+    if request.method == "GET":
+        db_sess = db_session.create_session()
+        vacancy = db_sess.query(Vacancy).filter(Vacancy.id == id, Vacancy.user == current_user).first()
+        if vacancy:
+            form.title.data = vacancy.title
+            form.content.data = vacancy.content
+        else:
+            abort(404)
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        vacancy = db_sess.query(Vacancy).filter(Vacancy.id == id, Vacancy.user == current_user).first()
+        if vacancy:
+            vacancy.title = form.title.data
+            vacancy.content = form.content.data
+            db_sess.commit()
+            return redirect('/profile')
+        else:
+            abort(404)
+    return render_template('change_vacancy.html',
+                           title='Редактирование вакансии',
+                           sec_title='Редактирование вакансии',
+                           form=form
+                           )
+
+
+@app.route('/respond_vacancy/<id>', methods=['GET', 'POST'])
+@login_required
+def respond_vacancy(id):
+    return 'заглушккккккккк respond_vacancy'
+
+
+@app.route('/search/<text>', methods=['GET', 'POST'])
+def search(text):
+    db_sess = db_session.create_session()
+    vacancies = db_sess.query(Vacancy).filter(
+        (Vacancy.content.like(f'%{text}%')) | (Vacancy.title.like(f'%{text}%'))).all()
+    return render_template('search.html', sp=vacancies, title='Поиск', sec_title=f'Все вакансии по запросу "{text}"')
 
 
 if __name__ == '__main__':
     db_session.global_init("db/info.db")
-    # db_sess = db_session.create_session()
-    # user = db_sess.query(User).filter(User.id == 1).first()
-    # vacancy = Vacancy(title="Программист", content="Пишем программы")
-    # user.vacancy.append(vacancy)
-    # db_sess.commit()
-
     app.run(port=8080, host='127.0.0.1')
