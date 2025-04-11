@@ -76,16 +76,23 @@ def reg():
 def login():
     form = LoginForm()
     if form.validate_on_submit():
+        if form.to_main.data:
+            return redirect('/')
+
         db_sess = db_session.create_session()
         user = db_sess.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
-            print(123)
             login_user(user, remember=form.remember_me.data)
             return redirect("/")
-        return render_template('login.html', title='Авторизация', sec_title='Авторизация',
+        return render_template('login.html',
+                               title='Авторизация',
+                               sec_title='Авторизация',
                                message="Неправильный логин или пароль",
                                form=form)
-    return render_template('login.html', title='Авторизация', sec_title='Авторизация', form=form)
+    return render_template('login.html',
+                           title='Авторизация',
+                           sec_title='Авторизация',
+                           form=form)
 
 
 @app.route('/profile', methods=['GET', 'POST'])
@@ -107,8 +114,10 @@ def logout():
 @app.route('/change_profile/<name>', methods=['GET', 'POST'])
 @login_required
 def change_profile(name):
-    # Сделать проверку на пользователя current_user.name == name
-    return 'заглушккккккккк change_profile'
+    if current_user.name != name:
+        return "У вас нет прав для изменения этого профиля", 403  # HTTP 403 Forbidden
+    # Здесь продолжение вашей логики для изменения профиля
+    return 'Логика изменения профиля'
 
 
 @app.route('/new_vacancy', methods=['GET', 'POST'])
@@ -131,8 +140,17 @@ def new_vacancy():
 @app.route('/remove_profile/<name>', methods=['GET', 'POST'])
 @login_required
 def delete_user(name):
-    # Сделать проверку на пользователя current_user.name == name
-    return 'заглушккккккккк remove_profile'
+    if current_user.name != name:
+        return "У вас нет прав для удаления этого профиля", 403
+    # Логика удаления профиля
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.name == name).first()
+    if user:
+        db_sess.delete(user)
+        db_sess.commit()
+        logout_user()  # Выход пользователя после удаления аккаунта
+        return redirect('/')
+    return "Пользователь не найден", 404
 
 
 @app.route('/remove_vacancy/<id>', methods=['POST', 'GET'])
@@ -149,13 +167,30 @@ def delete_vacancy(id):
     return 'Недостаточно прав!'
 
 
-
-
 @app.route('/change_vacancy/<id>', methods=['GET', 'POST'])
 @login_required
 def change_vacancy(id):
-    # Сделать проверку на пользователя
-    return 'заглушккккккккк change_vacancy'
+    db_sess = db_session.create_session()
+    vacancy = db_sess.query(Vacancy).filter(Vacancy.id == id).first()
+
+    if not vacancy:
+        return "Вакансия не найдена", 404
+
+    if current_user.id != vacancy.user_id or not current_user.is_employer:
+        return "У вас нет прав для изменения этой вакансии", 403
+
+    # Здесь ваша логика изменения вакансии
+    form = ChangeVacancyForm()
+    if form.validate_on_submit():
+        vacancy.title = form.title.data
+        vacancy.content = form.content.data
+        db_sess.commit()
+        return redirect('/profile')
+
+    # Предзаполнение формы текущими данными вакансии
+    form.title.data = vacancy.title
+    form.content.data = vacancy.content
+    return render_template('change_vacancy.html', form=form)
 
 
 if __name__ == '__main__':

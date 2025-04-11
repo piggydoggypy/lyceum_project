@@ -1,30 +1,48 @@
-{% extends "reg.html" %}
+{% extends "base.html" %}
+
 {% block content %}
-<div class="d-flex justify-content-center">
-    <form action="" method="post" novalidate class="text-center" style="width: 100%; max-width: 500px;">
-        {{ form.hidden_tag() }}
-        {% if message %}
-        <div class="alert alert-danger" role="alert">
-            <strong>{{ message }}</strong>
-        </div>
-        {% endif %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="auth-container">
+            <h2 class="text-center mb-4">{{ sec_title }}</h2>
 
-        <div class="row justify-content-center mb-4">
-            <div class="col-5 mb-3 mb-md-0">
-                {{ form.email(class="form-control", placeholder="Почта") }}
-            </div>
-            <div class="col-5">
-                {{ form.password(class="form-control", placeholder="Пароль") }}
-            </div>
-        </div>
-        <div class="mb-3">
-            {{ form.remember_me(class="form-check-input") }}
-            {{ form.remember_me.label(class="form-check-label") }}
-        </div>
+            <form action="" method="post">
+                {{ form.hidden_tag() }}
 
-        <div class="mb-3">
-            {{ form.submit(type="submit", class="btn btn-dark btn-lg") }}
+                <div class="mb-3">
+                    {{ form.email.label(class="form-label") }}
+                    {{ form.email(class="form-control") }}
+                    {% for error in form.email.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.password.label(class="form-label") }}
+                    {{ form.password(class="form-control") }}
+                    {% for error in form.password.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="mb-3 form-check">
+                    {{ form.remember_me(class="form-check-input") }}
+                    {{ form.remember_me.label(class="form-check-label") }}
+                </div>
+
+                <div class="d-grid gap-2 mb-3">
+                    {{ form.submit(class="btn btn-primary") }}
+                </div>
+
+                <div class="text-center">
+                    <a href="/" class="btn btn-outline-secondary">На главную</a>
+                </div>
+
+                {% if message %}
+                    <div class="alert alert-danger mt-3">{{ message }}</div>
+                {% endif %}
+            </form>
         </div>
-    </form>
+    </div>
 </div>
 {% endblock %}
