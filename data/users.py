@@ -20,6 +20,7 @@ class User(SqlAlchemyBase, UserMixin):
     is_employer = sqlalchemy.Column(sqlalchemy.Boolean, nullable=True)
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     profile_image = sqlalchemy.Column(sqlalchemy.String, default='/static/img/default_image.png')
+    responded_vacancies = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     vacancy = orm.relationship("Vacancy", back_populates='user')
 
     def __repr__(self):

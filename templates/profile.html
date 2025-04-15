@@ -103,14 +103,20 @@
 
     <div class="btn-container">
         <a href="/change_profile/{{current_user.id}}" class="btn btn-dark" onclick="return confirm('Вы действительно хотите изменить профиль?')">Изменить профиль</a>
+        {% if current_user.is_employer %}
         <a href="/new_vacancy" class="btn btn-dark">Добавить вакансию</a>
+        {% endif %}
         <a href="/" class="btn btn-dark">На главную</a>
         <a href="/remove_profile/{{current_user.id}}" class="btn btn-alert" onclick="return confirm('Вы действительно хотите удалить аккаунт?')">Удалить аккаунт</a>
     </div>
 
     <!-- Список вакансий -->
     <div class="mt-5">
-        <h2 class="mb-4">Мои вакансии</h2>
+        {% if current_user.is_employer %}
+            <h2 class="mb-4">Мои вакансии</h2>
+        {% else %}
+            <h2 class="mb-4">Вакансии на которые я откликнулся</h2>
+        {% endif %}
         {% if sp %}
         {% for vacancy in sp %}
         <div class="vacancy-card">
@@ -127,13 +133,19 @@
                 </div>
                 <div>
                     <a href="/remove_vacancy/{{vacancy.id}}" class="btn btn-alert" onclick="return confirm('Вы действительно хотите удалить вакансию?')">Удалить вакансию</a>
+                    {% if current_user.is_employer %}
                     <a href="/change_vacancy/{{vacancy.id}}" class="btn btn-warning" onclick="return confirm('Вы действительно хотите изменить вакансию?')">Изменить вакансию</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
         {% endfor %}
         {% else %}
-        <div class="alert alert-info">У вас пока нет вакансий</div>
+            {% if current_user.is_employer %}
+                <div class="alert alert-info">У вас пока нет вакансий</div>
+            {% else %}
+                <div class="alert alert-info">Вы пока не откликнулись ни на одну вакансию</div>
+            {% endif %}
         {% endif %}
     </div>
 </div>

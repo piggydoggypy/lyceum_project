@@ -18,13 +18,16 @@ login_manager.init_app(app)
 
 # Повторить пароль в форме регистрации
 # Сделать загрузку фото
-# Сделать отклики на вакансии
 # Сделать изменение вакансий
 # Сделать navbar
-# Пофиксить баг с css на странице изменнения вакансии
 # Сделать просмотр профилей
 # Добавить в поиск вакансий поиск компаний
-# Сделать общую страницу ошибки
+# Сделать общую страницу ошибки (# страница ошибки)
+# Сделать отправку письма при отклике
+
+def post_message():
+    pass
+
 
 # Работает
 @login_manager.user_loader
@@ -106,7 +109,15 @@ def login():
 @login_required
 def profile():
     form = LoginForm()
-    all_vac = current_user.vacancy
+    if current_user.is_employer:
+        all_vac = current_user.vacancy
+    else:
+        s = current_user.responded_vacancies
+        all_vac = []
+        if s != '':
+            ids = [int(x) for x in s.split(';')]
+            db_sess = db_session.create_session()
+            all_vac = db_sess.query(Vacancy).filter(Vacancy.id.in_(ids))
     return render_template('profile.html', title='Личный кабинет', sec_title='Личный кабинет', form=form,
                            sp=all_vac)
 
@@ -161,6 +172,7 @@ def delete_user(id):
         db_sess.delete(user)
         db_sess.commit()
         return redirect('/')
+    # страница ошибки
     return 'Недостаточно прав!'
 
 
@@ -171,16 +183,29 @@ def delete_vacancy(id):
     db_sess = db_session.create_session()
     vacancy = db_sess.query(Vacancy).filter(Vacancy.id == id).first()
     if vacancy:
-        if current_user.is_employer and current_user.id == vacancy.user.id:
+        if current_user.id == vacancy.user.id:
             db_sess.delete(vacancy)
             db_sess.commit()
             return redirect('/profile')
-        return 'Недостаточно прав!'
+        elif f'{id}' in current_user.responded_vacancies:
+            user = db_sess.query(User).filter(User.id == current_user.id).first()
+            s = user.responded_vacancies
+            if f';{id}' in s:
+                s = s.replace(f';{id}', '', 1)
+            elif f'{id};' in s:
+                s = s.replace(f'{id};', '', 1)
+            else:
+                s = s.replace(f'{id}', '', 1)
+            user.responded_vacancies = s
+            db_sess.commit()
+            return redirect('/profile')
+        else:
+            return 'Недостаточно прав!'
     else:
         abort(404)
 
 
-# Не работает
+# Работает
 @app.route('/change_vacancy/<id>', methods=['GET', 'POST'])
 @login_required
 def change_vacancy(id):
@@ -189,19 +214,28 @@ def change_vacancy(id):
         db_sess = db_session.create_session()
         vacancy = db_sess.query(Vacancy).filter(Vacancy.id == id, Vacancy.user == current_user).first()
         if vacancy:
-            form.title.data = vacancy.title
-            form.content.data = vacancy.content
+            if current_user.id == vacancy.user.id and vacancy.user.is_employer:
+                form.title.data = vacancy.title
+                form.content.data = vacancy.content
+            else:
+                # страница ошибки
+                return 'Вы не являетесь создателем новости'
         else:
+            # страница ошибки
             abort(404)
     if form.validate_on_submit():
         db_sess = db_session.create_session()
         vacancy = db_sess.query(Vacancy).filter(Vacancy.id == id, Vacancy.user == current_user).first()
         if vacancy:
-            vacancy.title = form.title.data
-            vacancy.content = form.content.data
-            db_sess.commit()
-            return redirect('/profile')
+            if current_user.id == vacancy.user.id and vacancy.user.is_employer:
+                vacancy.title = form.title.data
+                vacancy.content = form.content.data
+                db_sess.commit()
+                return redirect('/profile')
+            # страница ошибки
+            return 'Вы не являетесь создателем новости'
         else:
+            # страница ошибки
             abort(404)
     return render_template('change_vacancy.html',
                            title='Редактирование вакансии',
@@ -213,7 +247,38 @@ def change_vacancy(id):
 @app.route('/respond_vacancy/<id>', methods=['GET', 'POST'])
 @login_required
 def respond_vacancy(id):
-    return 'заглушккккккккк respond_vacancy'
+    form = respond_Form()
+    if request.method == "GET":
+        if not current_user.is_employer:
+            db_sess = db_session.create_session()
+            vacancy = db_sess.query(Vacancy).filter(Vacancy.id == id).first()
+            if vacancy:
+                vacancies = db_sess.query(Vacancy).filter(Vacancy.company_id == current_user.id).all()
+                if vacancy in vacancies:
+                    # страница ошибки
+                    return 'Вы уже откликнулись на эту вакансию'
+
+                return render_template("respond_vacancy.html", title='Отклик на вакансию',
+                                       sec_title='Отклик на вакансию', form=form)
+            else:
+                # страница ошибки
+                abort(404)
+        else:
+            # страница ошибки
+            return 'Вы не являетесь сотрудником'
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).filter(current_user.id == User.id).first()
+        s = user.responded_vacancies
+        if s != '':
+            s += f';{id}'
+        else:
+            s = str(id)
+        user.responded_vacancies = s
+        db_sess.commit()
+        return redirect('/profile')
+    return render_template("respond_vacancy.html", title='Отклик на вакансию',
+                           sec_title='Отклик на вакансию', form=form)
 
 
 @app.route('/search/<text>', methods=['GET', 'POST'])
