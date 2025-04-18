@@ -81,7 +81,10 @@ def reg():
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
-        return redirect('/login')
+        user = db_sess.query(User).filter(User.email == form.email.data).first()
+        login_user(user, remember=form.remember_me.data)
+
+        return redirect('/')
 
     return render_template('registration.html', title='Регистрация', \
                            sec_title='Регистрация', form=form)
