@@ -29,6 +29,21 @@ def post_message():
     pass
 
 
+def error_page(error):
+    return render_template('error_page.html', mes=error)
+
+
+def get_employee_vacansies(user):
+    s = user.responded_vacancies
+    if s != '' and s is not None:
+        sp = [int(x) for x in s.split(';')]
+        db_sess = db_session.create_session()
+        all_vac = db_sess.query(Vacancy).filter(Vacancy.id.in_(sp)).all()
+        return all_vac
+
+    return []
+
+
 # Работает
 @login_manager.user_loader
 def load_user(user_id):
@@ -98,7 +113,6 @@ def login():
         db_sess = db_session.create_session()
         user = db_sess.query(User).filter(User.email == form.email.data).first()
         if user and user.check_password(form.password.data):
-            print(123)
             login_user(user, remember=form.remember_me.data)
             return redirect("/")
         return render_template('login.html', title='Авторизация', sec_title='Авторизация',
@@ -115,12 +129,8 @@ def profile():
     if current_user.is_employer:
         all_vac = current_user.vacancy
     else:
-        s = current_user.responded_vacancies
-        all_vac = []
-        if s != '':
-            ids = [int(x) for x in s.split(';')]
-            db_sess = db_session.create_session()
-            all_vac = db_sess.query(Vacancy).filter(Vacancy.id.in_(ids))
+        all_vac = get_employee_vacansies(current_user)
+
     return render_template('profile.html', title='Личный кабинет', sec_title='Личный кабинет', form=form,
                            sp=all_vac)
 
@@ -149,7 +159,7 @@ def new_vacancy():
     form = NewVacancy()
     if form.validate_on_submit():
         if not current_user.is_employer:
-            return 'Вы не являетесь работодателем!'
+            return error_page('Вы не являетесь работодателем!')
         vacancy = Vacancy(title=form.title.data, content=form.content.data)
         db_sess = db_session.create_session()
         user = db_sess.query(User).filter(User.id == current_user.id).first()
@@ -175,8 +185,7 @@ def delete_user(id):
         db_sess.delete(user)
         db_sess.commit()
         return redirect('/')
-    # страница ошибки
-    return 'Недостаточно прав!'
+    return error_page('Недостаточно прав!')
 
 
 # Работает
@@ -185,12 +194,12 @@ def delete_user(id):
 def delete_vacancy(id):
     db_sess = db_session.create_session()
     vacancy = db_sess.query(Vacancy).filter(Vacancy.id == id).first()
-    if vacancy:
+    if vacancy is not None:
         if current_user.id == vacancy.user.id:
             db_sess.delete(vacancy)
             db_sess.commit()
             return redirect('/profile')
-        elif f'{id}' in current_user.responded_vacancies:
+        elif current_user.responded_vacancies is not None and f'{id}' in current_user.responded_vacancies:
             user = db_sess.query(User).filter(User.id == current_user.id).first()
             s = user.responded_vacancies
             if f';{id}' in s:
@@ -203,9 +212,9 @@ def delete_vacancy(id):
             db_sess.commit()
             return redirect('/profile')
         else:
-            return 'Недостаточно прав!'
+            return error_page('Недостаточно прав!')
     else:
-        abort(404)
+        return error_page('404 Страница не существует')
 
 
 # Работает
@@ -215,17 +224,18 @@ def change_vacancy(id):
     form = NewVacancy()
     if request.method == "GET":
         db_sess = db_session.create_session()
-        vacancy = db_sess.query(Vacancy).filter(Vacancy.id == id, Vacancy.user == current_user).first()
-        if vacancy:
+        vacancy = db_sess.query(Vacancy).filter(Vacancy.id == id).first()
+        if vacancy is not None:
             if current_user.id == vacancy.user.id and vacancy.user.is_employer:
                 form.title.data = vacancy.title
                 form.content.data = vacancy.content
             else:
                 # страница ошибки
-                return 'Вы не являетесь создателем новости'
+
+                return error_page('Недостаточно прав!')
         else:
             # страница ошибки
-            abort(404)
+            return error_page('404 Страница не существует')
     if form.validate_on_submit():
         db_sess = db_session.create_session()
         vacancy = db_sess.query(Vacancy).filter(Vacancy.id == id, Vacancy.user == current_user).first()
@@ -236,10 +246,10 @@ def change_vacancy(id):
                 db_sess.commit()
                 return redirect('/profile')
             # страница ошибки
-            return 'Вы не являетесь создателем новости'
+            return error_page('Вы не являетесь создателем новости')
         else:
             # страница ошибки
-            abort(404)
+            return error_page('404 Страница не существует')
     return render_template('change_vacancy.html',
                            title='Редактирование вакансии',
                            sec_title='Редактирование вакансии',
@@ -255,25 +265,27 @@ def respond_vacancy(id):
         if not current_user.is_employer:
             db_sess = db_session.create_session()
             vacancy = db_sess.query(Vacancy).filter(Vacancy.id == id).first()
-            if vacancy:
-                vacancies = db_sess.query(Vacancy).filter(Vacancy.company_id == current_user.id).all()
-                if vacancy in vacancies:
+            if vacancy is not None:
+                vacancies = get_employee_vacansies(current_user)
+                for el in vacancies:
+
+                    if el.id == vacancy.id:
                     # страница ошибки
-                    return 'Вы уже откликнулись на эту вакансию'
+                        return error_page('Вы уже откликнулись на эту вакансию')
 
                 return render_template("respond_vacancy.html", title='Отклик на вакансию',
                                        sec_title='Отклик на вакансию', form=form)
             else:
                 # страница ошибки
-                abort(404)
+                return error_page('404 Страница не существует')
         else:
             # страница ошибки
-            return 'Вы не являетесь сотрудником'
+            return error_page('Вы не являетесь сотрудником')
     if form.validate_on_submit():
         db_sess = db_session.create_session()
         user = db_sess.query(User).filter(current_user.id == User.id).first()
         s = user.responded_vacancies
-        if s != '':
+        if s != '' and s is not None:
             s += f';{id}'
         else:
             s = str(id)

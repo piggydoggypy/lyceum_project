@@ -4,7 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="47f12dd1-9361-47a7-967c-7e26b42af026" name="Changes" comment="Сделал profile remove">
+    <list default="true" id="47f12dd1-9361-47a7-967c-7e26b42af026" name="Changes" comment="Сделал работу галочки запомнить меня при регистрации">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db/info.db" beforeDir="false" afterPath="$PROJECT_DIR$/db/info.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
@@ -16,8 +17,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="Python Script" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -81,7 +82,15 @@
       <option name="project" value="LOCAL" />
       <updated>1743885802799</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Сделал работу галочки запомнить меня при регистрации">
+      <option name="closed" value="true" />
+      <created>1744998215826</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1744998215826</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -134,17 +143,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Сделал vacancy remove" />
-    <option name="LAST_COMMIT_MESSAGE" value="Сделал vacancy remove" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>121</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="Сделал работу галочки запомнить меня при регистрации" />
+    <option name="LAST_COMMIT_MESSAGE" value="Сделал работу галочки запомнить меня при регистрации" />
   </component>
 </project>
