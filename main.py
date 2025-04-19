@@ -20,9 +20,7 @@ login_manager.init_app(app)
 # Сделать загрузку фото
 # Сделать изменение вакансий
 # Сделать navbar
-# Сделать просмотр профилей
 # Добавить в поиск вакансий поиск компаний
-# Сделать общую страницу ошибки (# страница ошибки)
 # Сделать отправку письма при отклике
 
 def post_message():
@@ -125,14 +123,33 @@ def login():
 @app.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
-    form = LoginForm()
+    form = LoginForm()  # без формы почему-то не работает...
     if current_user.is_employer:
         all_vac = current_user.vacancy
     else:
         all_vac = get_employee_vacansies(current_user)
+        print(all_vac)
 
     return render_template('profile.html', title='Личный кабинет', sec_title='Личный кабинет', form=form,
                            sp=all_vac)
+
+
+@app.route('/view_profile/<id>', methods=['GET', 'POST'])
+@login_required
+def view_profile(id):
+    form = LoginForm()
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.id == id).first()
+    if user is not None:
+        if user.is_employer:
+            all_vac = user.vacancy
+        else:
+            all_vac = get_employee_vacansies(user)
+    else:
+        return error_page('404 Страница не существует')
+
+    return render_template('view_profile.html', title=f'Профиль {user.name}', sec_title=f'Профиль {user.name}',
+                           sp=all_vac, form=form, user=user)
 
 
 # Работает
@@ -270,7 +287,7 @@ def respond_vacancy(id):
                 for el in vacancies:
 
                     if el.id == vacancy.id:
-                    # страница ошибки
+                        # страница ошибки
                         return error_page('Вы уже откликнулись на эту вакансию')
 
                 return render_template("respond_vacancy.html", title='Отклик на вакансию',

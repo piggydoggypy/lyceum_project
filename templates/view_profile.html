@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet"
@@ -9,6 +9,9 @@
     <link type="text/css" rel="stylesheet" href="../static/css/style.css">
     <title>{{ title }}</title>
     <style>
+        html, body {
+            height: 100%;
+        }
         .profile-container {
             display: flex;
             justify-content: center;
@@ -84,32 +87,50 @@
 <body class="text-center">
 <div class="container my-5">
     <h1 class="text-center mb-4">{{sec_title}}</h1>
+
+    <div class="profile-container">
+        <img src="{{current_user.profile_image}}" class="profile-image">
+        <div class="profile-info text-start">
+            <h3>{{current_user.name}}</h3>
+            <div class="mb-2">
+                <span class="text-muted">{{current_user.telephone}}</span>
+            </div>
+            <h5>{{current_user.email}}</h5>
+        </div>
+    </div>
+
+
+
     <!-- Список вакансий -->
     <div class="mt-5">
-        {% if sp %}
-            {% for vacancy in sp %}
-                    <div class="vacancy-card">
-                        <div class="vacancy-header">
-                            <h4 class="mb-0">{{vacancy.title}}</h4>
-                            <a href="/view_profile/{{vacancy.user.id}}" class="text-muted">Автор: {{vacancy.user.name}}</a>
-                        </div>
-                        <div class="vacancy-content mt-3">
-                            {{vacancy.content}}
-                        </div>
-                        <div class="vacancy-footer">
-                            <div>
-                                {{vacancy.user.email}} | {{vacancy.user.telephone}}
-                            </div>
-                            {% if vacancy.user.id != current_user.id %}
-                                <div>
-                                    <a href="/respond_vacancy/{{vacancy.id}}" class="btn btn-primary">Откликнуться</a>
-                                </div>
-                            {% endif %}
-                        </div>
-                    </div>
-            {% endfor %}
+        {% if user.is_employer %}
+            <h2 class="mb-4">Вакансии работодателя</h2>
         {% else %}
-        <div class="alert alert-info">У вас пока нет вакансий</div>
+            <h2 class="mb-4">Вакансии на которые работник откликался</h2>
+        {% endif %}
+        {% if sp %}
+        {% for vacancy in sp %}
+        <div class="vacancy-card">
+            <div class="vacancy-header">
+                <h4 class="mb-0">{{vacancy.title}}</h4>
+                <span class="text-muted">Автор: {{vacancy.user.name}}</span>
+            </div>
+            <div class="vacancy-content mt-3">
+                {{vacancy.content}}
+            </div>
+            <div class="vacancy-footer">
+                <div>
+                    {{vacancy.user.email}} | {{vacancy.user.telephone}}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+            {% if user.is_employer %}
+                <div class="alert alert-info">У работодателя пока нет вакансий</div>
+            {% else %}
+                <div class="alert alert-info">Работник пока не откликнулся ни на одну вакансию</div>
+            {% endif %}
         {% endif %}
     </div>
 </div>
