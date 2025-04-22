@@ -46,4 +46,12 @@ body {
 .btn-warning:active {
     background-color: #ffc107 !important;
     border-color: #ffc107 !important;
-    color: #000 !important;
+    color: #000 !important;}
+
+.fixed-button {
+    position: fixed;  /* Фиксированное положение */
+    top: 10px;       /* Отступ сверху */
+    left: 10px;     /* Отступ слева */
+    padding: 8px 16px;
+
+}

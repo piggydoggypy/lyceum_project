@@ -124,11 +124,11 @@ def login():
 @login_required
 def profile():
     form = LoginForm()  # без формы почему-то не работает...
+    db_sess = db_session.create_session()
     if current_user.is_employer:
         all_vac = current_user.vacancy
     else:
         all_vac = get_employee_vacansies(current_user)
-        print(all_vac)
 
     return render_template('profile.html', title='Личный кабинет', sec_title='Личный кабинет', form=form,
                            sp=all_vac)
