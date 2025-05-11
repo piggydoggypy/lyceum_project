@@ -1,4 +1,9 @@
 import os
+from email import encoders
+from email.mime.audio import MIMEAudio
+from email.mime.base import MIMEBase
+from email.mime.image import MIMEImage
+from email.mime.text import MIMEText
 
 from flask import Flask, render_template, redirect, request, abort
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
@@ -13,9 +18,17 @@ from werkzeug.utils import secure_filename
 
 from forms.all_forms import *
 
+import smtplib
+import mimetypes
+import os
+from email.mime.multipart import MIMEMultipart
+
+from email_sender import send_email
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'piggydoggy??biber'
 app.config['UPLOAD_FOLDER'] = 'static/img'
+app.config['FOR_FILES'] = 'static/files'
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', }
 app.config['MAX_IMAGE_SIZE'] = (250, 250)
 
@@ -24,7 +37,6 @@ login_manager.init_app(app)
 
 
 # Добавить в поиск вакансий поиск компаний
-# Сделать отправку письма при отклике
 
 def resize_image(image_file):
     img = Image.open(image_file)
@@ -46,8 +58,62 @@ def resize_image(image_file):
     return background
 
 
-def post_message():
-    pass
+def post_message(email, title, text, attachments):
+    addr_from = os.getenv("FROM")
+    password = os.getenv("PASSWORD")
+    host = os.getenv('HOST')
+    port = os.getenv('PORT')
+
+    msg = MIMEMultipart()
+
+    server = smtplib.SMTP(host)
+    server.connect(host, '465')
+    server.starttls()
+    server.login(addr_from, password)
+    msg['From'] = addr_from
+    msg['To'] = email
+    msg["Subject"] = title
+
+    body = text
+    msg.attach(MIMEText(body, 'plain'))
+
+    process_attachments(msg, attachments)
+
+    server.send_message(msg)
+    server.quit()
+    return True
+
+
+def process_attachments(msg, attachments):
+    for f in attachments:
+        if os.path.isfile(f):
+            attach_file(msg, f)
+        elif os.path.exists(f):
+            dir = os.listdir(f)
+            for file in dir:
+                attach_file(msg, f + '/' + file)
+
+
+def attach_file(msg, f):
+    attach_types = {
+        'text': MIMEText,
+        'image': MIMEImage,
+        'audio': MIMEAudio
+    }
+    filename = os.path.basename(f)
+    ctype, encoding = mimetypes.guess_type(f)
+    if ctype is None or encoding is not None:
+        ctype = 'applicetion/octet-stream'
+    maintype, subtype = ctype.split('/', 1)
+    with open(f, mode='rb' if maintype != 'text' else 'r') as fp:
+        if maintype in attach_types:
+            file = attach_types[maintype](fp.read(), _subtype=subtype)
+        else:
+            file = MIMEBase(maintype, subtype)
+            file.set_payload(fp.read())
+            encoders.encode_base64(file)
+        file.add_header('Content-Disposition', 'attachment', filename=filename)
+        msg.attach(file)
 
 
 def is_valide_file(filename):
@@ -120,7 +186,7 @@ def reg():
         if 'file' in request.files:
             file = request.files['file']
             if file and file.filename != '' and is_valide_file(file.filename):
-                filename = file.filename
+                filename = secure_filename(file.filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                 try:
                     # Сжимаем изображение
@@ -401,7 +467,27 @@ def respond_vacancy(id):
             return error_page('Вы не являетесь сотрудником')
     if form.validate_on_submit():
         db_sess = db_session.create_session()
+        vacancy = db_sess.query(Vacancy).filter(Vacancy.id == id).first()
         user = db_sess.query(User).filter(current_user.id == User.id).first()
+
+        attachments = []
+        if 'file' in request.files:
+            file = request.files['file']
+            if file and file.filename != '':
+                filename = secure_filename(file.filename)
+                if not os.path.exists(app.config['FOR_FILES']):
+                    os.makedirs(app.config['FOR_FILES'])
+                file_path = os.path.join(app.config['FOR_FILES'], filename)
+                file.save(file_path)
+                attachments.append(file_path)
+
+        send_email('o0oo.1111@yandex.ru', 'awyefslehqaiewph', vacancy.user.email, form.theme.data, form.content.data,
+                   attachments, 'smtp.yandex.ru', '465')
+        # Удаляем временные файлы после отправки
+        for file_path in attachments:
+            if os.path.exists(file_path):
+                os.remove(file_path)
+
         s = user.responded_vacancies
         if s != '' and s is not None:
             s += f';{id}'

@@ -6,5 +6,5 @@ from wtforms.validators import DataRequired
 class respond_Form(FlaskForm):
     theme = StringField(validators=[DataRequired()])
     content = TextAreaField(validators=[DataRequired()])
-    files = FileField()
+    file = FileField()
     submit = SubmitField('Отправить')
