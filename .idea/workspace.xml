@@ -4,16 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="47f12dd1-9361-47a7-967c-7e26b42af026" name="Changes" comment="Сделал просмотр профилей, добавил фозможность посмотреть профиль работодателя в поиске вакансий">
+    <list default="true" id="47f12dd1-9361-47a7-967c-7e26b42af026" name="Changes" comment="Добавил кнопку на главную на все страницы">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/change_vacancy.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/change_vacancy.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/new_vacancy.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/new_vacancy.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/info.db" beforeDir="false" afterPath="$PROJECT_DIR$/db/info.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/forms/all_forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/forms/all_forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/forms/registration.py" beforeDir="false" afterPath="$PROJECT_DIR$/forms/registration.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/registration.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/registration.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/respond_vacancy.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/respond_vacancy.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/search.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/search.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/vacancy_base.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/view_profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/view_profile.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -51,22 +49,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;Python.all_models.executor&quot;: &quot;Run&quot;,
-    &quot;Python.companies.executor&quot;: &quot;Run&quot;,
-    &quot;Python.main.executor&quot;: &quot;Run&quot;,
-    &quot;Python.regEmploee.executor&quot;: &quot;Run&quot;,
-    &quot;Python.users.executor&quot;: &quot;Run&quot;,
-    &quot;Python.vacancies.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;second__branch&quot;,
-    &quot;ignore_missing_gitignore&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/dvdgg/IdeaProjects/lyceum_project/templates&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Python.all_models.executor": "Run",
+    "Python.companies.executor": "Run",
+    "Python.main.executor": "Run",
+    "Python.regEmploee.executor": "Run",
+    "Python.registration.executor": "Run",
+    "Python.users.executor": "Run",
+    "Python.vacancies.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "second__branch",
+    "ignore_missing_gitignore": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/dvdgg/IdeaProjects/lyceum_project/templates"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\dvdgg\IdeaProjects\lyceum_project\templates" />
@@ -109,7 +108,15 @@
       <option name="project" value="LOCAL" />
       <updated>1745061119435</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Добавил кнопку на главную на все страницы">
+      <option name="closed" value="true" />
+      <created>1745333517348</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1745333517348</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -164,6 +171,7 @@
     <MESSAGE value="Сделал vacancy remove" />
     <MESSAGE value="Сделал работу галочки запомнить меня при регистрации" />
     <MESSAGE value="Сделал просмотр профилей, добавил фозможность посмотреть профиль работодателя в поиске вакансий" />
-    <option name="LAST_COMMIT_MESSAGE" value="Сделал просмотр профилей, добавил фозможность посмотреть профиль работодателя в поиске вакансий" />
+    <MESSAGE value="Добавил кнопку на главную на все страницы" />
+    <option name="LAST_COMMIT_MESSAGE" value="Добавил кнопку на главную на все страницы" />
   </component>
 </project>

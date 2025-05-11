@@ -1,30 +1,58 @@
+import os
+
 from flask import Flask, render_template, redirect, request, abort
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from datetime import datetime as dt
+from PIL import Image
 
 from data import db_session
 from data.users import User
 from data.vacancies import Vacancy
 from forms.login import LoginForm
+from werkzeug.utils import secure_filename
 
 from forms.all_forms import *
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'piggydoggy??piggydoggy'
+app.config['SECRET_KEY'] = 'piggydoggy??biber'
+app.config['UPLOAD_FOLDER'] = 'static/img'
+app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', }
+app.config['MAX_IMAGE_SIZE'] = (250, 250)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 
 
-# Повторить пароль в форме регистрации
-# Сделать загрузку фото
-# Сделать изменение вакансий
-# Сделать navbar
 # Добавить в поиск вакансий поиск компаний
 # Сделать отправку письма при отклике
 
+def resize_image(image_file):
+    img = Image.open(image_file)
+
+    if img.mode in ('RGBA', 'P'):
+        img = img.convert('RGB')
+
+    img.thumbnail(app.config['MAX_IMAGE_SIZE'], Image.LANCZOS)
+
+    background = Image.new('RGB', app.config['MAX_IMAGE_SIZE'], (255, 255, 255))
+    background.paste(
+        img,
+        (
+            (app.config['MAX_IMAGE_SIZE'][0] - img.size[0]) // 2,
+            (app.config['MAX_IMAGE_SIZE'][1] - img.size[1]) // 2
+        )
+    )
+
+    return background
+
+
 def post_message():
     pass
+
+
+def is_valide_file(filename):
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 
 def error_page(error):
@@ -84,14 +112,47 @@ def reg():
             return render_template('registration.html', title='Регистрация работодателя', \
                                    sec_title='Регистрация работодателя', error='Неправильный формат почты', \
                                    form=form)
+        if form.password.data != form.rep_password.data:
+            return render_template('registration.html', title='Регистрация работодателя', \
+                                   sec_title='Регистрация работодателя', error='Пароли не совпадают', \
+                                   form=form)
+        filename = None
+        if 'file' in request.files:
+            file = request.files['file']
+            if file and file.filename != '' and is_valide_file(file.filename):
+                filename = file.filename
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                try:
+                    # Сжимаем изображение
+                    img = resize_image(file)
+                    filename = secure_filename(file.filename)
+                    # Сохраняем сжатое изображение
+                    img_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                    img.save(img_path, 'JPEG', quality=85)
 
-        user = User(login=form.login.data,
-                    name=form.name.data,
-                    description=form.description.data,
-                    email=form.email.data,
-                    telephone=form.telephone.data,
-                    is_employer=form.is_employer.data, )
-        user.set_password(form.password.data)
+                except Exception as e:
+                    print(f"Error processing image: {e}")
+                    return render_template('registration.html', title='Регистрация',
+                                           sec_title='Регистрация', form=form,
+                                           error='Ошибка обработки изображения')
+                user = User(login=form.login.data,
+                            name=form.name.data,
+                            description=form.description.data,
+                            email=form.email.data,
+                            telephone=form.telephone.data,
+                            is_employer=form.is_employer.data,
+                            profile_image='/static/img/' + filename)
+                user.set_password(form.password.data)
+        else:
+
+            user = User(login=form.login.data,
+                        name=form.name.data,
+                        description=form.description.data,
+                        email=form.email.data,
+                        telephone=form.telephone.data,
+                        is_employer=form.is_employer.data, )
+            user.set_password(form.password.data)
+
         db_sess.add(user)
         db_sess.commit()
         user = db_sess.query(User).filter(User.email == form.email.data).first()
@@ -161,12 +222,52 @@ def logout():
 
 
 # Не работает
-@app.route('/change_profile/<name>', methods=['GET', 'POST'])
+@app.route('/change_profile/<id>', methods=['GET', 'POST'])
 @login_required
-def change_profile(name):
-    pass
-    # Сделать проверку на пользователя current_user.name == name
-    return 'заглушккккккккк change_profile'
+def change_profile(id):
+    form = Change_profile()
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.id == id).first()
+
+    if user is None:
+        return error_page('404 Страница не существует')
+
+    if current_user.id != int(id):
+        return error_page('Вы не являетесь владельцем этого аккаунта!')
+
+    if request.method == "GET":
+        form.name.data = user.name
+        form.description.data = user.description
+        form.telephone.data = user.telephone
+
+    if form.validate_on_submit():
+        user.name = form.name.data
+        user.description = form.description.data
+        user.telephone = form.telephone.data
+
+        if 'file' in request.files:
+            file = request.files['file']
+            if file and file.filename != '' and is_valide_file(file.filename):
+                # Удаляем старое изображение, если оно есть
+                if user.profile_image and os.path.exists(user.profile_image[1:]):  # Убираем первый / для пути
+                    os.remove(user.profile_image[1:])
+
+                filename = secure_filename(file.filename)
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+
+                # Сжимаем и сохраняем изображение
+                img = resize_image(file)
+                img.save(file_path, 'JPEG', quality=85)
+
+                user.profile_image = f'/static/img/{filename}'
+
+        db_sess.commit()
+        return redirect('/profile')
+
+    return render_template('change_profile.html', form=form,
+                           title='Изменение профиля',
+                           sec_title='Изменение профиля',
+                           user=user)
 
 
 # Работает
