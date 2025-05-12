@@ -10,17 +10,17 @@ from email.mime.audio import MIMEAudio
 from email import encoders
 
 
-def send_email(sender_email, sender_password, recipient_email, subject, message, attachments=None,
-               smtp_server="smtp.gmail.com", smtp_port=587):
 
 
+def send_email(recipient_email, subject, message, user, attachments=None):
     # Создаем сообщение
     msg = MIMEMultipart()
-    msg['From'] = sender_email
+    msg['From'] = 'o0oo.1111@yandex.ru'
     msg['To'] = recipient_email
     msg['Subject'] = subject
 
     # Добавляем текст письма
+    message += f'\n\nДанное письмо было отправлено пользователем: {user.name}\nПочта для обратной связи: {user.email}\nСпасибо за использование нашего сервиса!'
     msg.attach(MIMEText(message, 'plain'))
 
     # Обрабатываем вложения
@@ -53,9 +53,9 @@ def send_email(sender_email, sender_password, recipient_email, subject, message,
                 msg.attach(attachment)
 
     # Устанавливаем соединение с сервером
-    server = smtplib.SMTP_SSL('smtp.yandex.ru',465)
-    #server.starttls()
-    server.connect('smtp.yandex.ru',465)
+    server = smtplib.SMTP_SSL('smtp.yandex.ru', 465)
+    # server.starttls()
+    server.connect('smtp.yandex.ru', 465)
     server.login('o0oo.1111@yandex.ru', 'awyefslehqaiewph')
     # server.sendmail(msg['From'], msg['To'], msg.as_string())
     server.send_message(msg)
