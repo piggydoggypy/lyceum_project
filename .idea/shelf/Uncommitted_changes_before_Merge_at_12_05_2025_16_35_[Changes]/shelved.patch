@@ -1,0 +1,187 @@
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"47f12dd1-9361-47a7-967c-7e26b42af026\" name=\"Changes\" comment=\"\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/data/vacancies.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/data/vacancies.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/main.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/main.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/templates/profile.html\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/templates/profile.html\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Python Script\" />\r\n        <option value=\"HTML File\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"ProjectCodeStyleSettingsMigration\">\r\n    <option name=\"version\" value=\"2\" />\r\n  </component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 5\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"2vEIZau0EkxnsTaPYJH92H5lUQL\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\">\r\n    <ConfirmationsSetting value=\"1\" id=\"Add\" />\r\n  </component>\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"DefaultHtmlFileTemplate\": \"HTML File\",\r\n    \"Python.all_models.executor\": \"Run\",\r\n    \"Python.companies.executor\": \"Run\",\r\n    \"Python.main.executor\": \"Run\",\r\n    \"Python.regEmploee.executor\": \"Run\",\r\n    \"Python.users.executor\": \"Run\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"git-widget-placeholder\": \"main\",\r\n    \"ignore_missing_gitignore\": \"true\",\r\n    \"kotlin-language-version-configured\": \"true\"\r\n  }\r\n}]]></component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"MoveFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\dvdgg\\IdeaProjects\\hh_clone\\forms\" />\r\n      <recent name=\"C:\\Users\\dvdgg\\IdeaProjects\\hh_clone\\templates\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"47f12dd1-9361-47a7-967c-7e26b42af026\" name=\"Changes\" comment=\"\" />\r\n      <created>1743703863574</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1743703863574</updated>\r\n    </task>\r\n    <servers />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"RECENT_FILTERS\">\r\n      <map>\r\n        <entry key=\"Branch\">\r\n          <value>\r\n            <list>\r\n              <RecentGroup>\r\n                <option name=\"FILTER_VALUES\">\r\n                  <option value=\"main\" />\r\n                </option>\r\n              </RecentGroup>\r\n              <RecentGroup>\r\n                <option name=\"FILTER_VALUES\">\r\n                  <option value=\"HEAD\" />\r\n                </option>\r\n              </RecentGroup>\r\n            </list>\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State>\r\n              <option name=\"CUSTOM_BOOLEAN_PROPERTIES\">\r\n                <map>\r\n                  <entry key=\"Show.Git.Branches\" value=\"true\" />\r\n                </map>\r\n              </option>\r\n              <option name=\"FILTERS\">\r\n                <map>\r\n                  <entry key=\"branch\">\r\n                    <value>\r\n                      <list>\r\n                        <option value=\"HEAD\" />\r\n                      </list>\r\n                    </value>\r\n                  </entry>\r\n                </map>\r\n              </option>\r\n            </State>\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 8ee847b08e84b50e4c33679bffbf45affb4bc3e2)
++++ b/.idea/workspace.xml	(date 1747056904480)
+@@ -4,11 +4,21 @@
+     <option name="autoReloadType" value="SELECTIVE" />
+   </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="47f12dd1-9361-47a7-967c-7e26b42af026" name="Changes" comment="">
++    <list default="true" id="47f12dd1-9361-47a7-967c-7e26b42af026" name="Changes" comment="Подготовка к запуска">
++      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_12_05_2025_0_20_[Changes]/shelved.patch" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_12_05_2025_0_20_[Changes]1/shelved.patch" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_12_05_2025_0_20_[Changes]2/info.db" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_12_05_2025_0_20_[Changes]2/shelved.patch" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_12_05_2025_0_20__Changes_.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_12_05_2025_0_20__Changes_2.xml" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/start.sh" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/templates/.gitignore" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" />
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/data/vacancies.py" beforeDir="false" afterPath="$PROJECT_DIR$/data/vacancies.py" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/db/info.db" beforeDir="false" afterPath="$PROJECT_DIR$/db/info.db" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/email_sender.py" beforeDir="false" afterPath="$PROJECT_DIR$/email_sender.py" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/templates/profile.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/profile.html" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -18,12 +28,17 @@
+   <component name="FileTemplateManagerImpl">
+     <option name="RECENT_TEMPLATES">
+       <list>
+-        <option value="Python Script" />
+         <option value="HTML File" />
++        <option value="Python Script" />
+       </list>
+     </option>
+   </component>
+   <component name="Git.Settings">
++    <option name="RECENT_BRANCH_BY_REPOSITORY">
++      <map>
++        <entry key="$PROJECT_DIR$" value="c4497c0e926cf996329881853303d8604c847958" />
++      </map>
++    </option>
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+   </component>
+   <component name="ProjectCodeStyleSettingsMigration">
+@@ -40,22 +55,31 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent"><![CDATA[{
+-  "keyToString": {
+-    "DefaultHtmlFileTemplate": "HTML File",
+-    "Python.all_models.executor": "Run",
+-    "Python.companies.executor": "Run",
+-    "Python.main.executor": "Run",
+-    "Python.regEmploee.executor": "Run",
+-    "Python.users.executor": "Run",
+-    "RunOnceActivity.ShowReadmeOnStart": "true",
+-    "git-widget-placeholder": "main",
+-    "ignore_missing_gitignore": "true",
+-    "kotlin-language-version-configured": "true"
++  <component name="PropertiesComponent">{
++  &quot;keyToString&quot;: {
++    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
++    &quot;Python.all_models.executor&quot;: &quot;Run&quot;,
++    &quot;Python.app.executor&quot;: &quot;Run&quot;,
++    &quot;Python.companies.executor&quot;: &quot;Run&quot;,
++    &quot;Python.email_sender.executor&quot;: &quot;Run&quot;,
++    &quot;Python.main.executor&quot;: &quot;Run&quot;,
++    &quot;Python.regEmploee.executor&quot;: &quot;Run&quot;,
++    &quot;Python.registration.executor&quot;: &quot;Run&quot;,
++    &quot;Python.users.executor&quot;: &quot;Run&quot;,
++    &quot;Python.vacancies.executor&quot;: &quot;Run&quot;,
++    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
++    &quot;git-widget-placeholder&quot;: &quot;second__branch&quot;,
++    &quot;ignore_missing_gitignore&quot;: &quot;true&quot;,
++    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
++    &quot;last_opened_file_path&quot;: &quot;C:/Users/dvdgg/IdeaProjects/lyceum_project/templates&quot;
+   }
+-}]]></component>
++}</component>
+   <component name="RecentsManager">
++    <key name="CopyFile.RECENT_KEYS">
++      <recent name="C:\Users\dvdgg\IdeaProjects\lyceum_project\templates" />
++    </key>
+     <key name="MoveFile.RECENT_KEYS">
++      <recent name="C:\Users\dvdgg\IdeaProjects\lyceum_project\venv" />
+       <recent name="C:\Users\dvdgg\IdeaProjects\hh_clone\forms" />
+       <recent name="C:\Users\dvdgg\IdeaProjects\hh_clone\templates" />
+     </key>
+@@ -69,6 +93,55 @@
+       <option name="presentableId" value="Default" />
+       <updated>1743703863574</updated>
+     </task>
++    <task id="LOCAL-00001" summary="Сделал vacancy remove">
++      <option name="closed" value="true" />
++      <created>1743885802799</created>
++      <option name="number" value="00001" />
++      <option name="presentableId" value="LOCAL-00001" />
++      <option name="project" value="LOCAL" />
++      <updated>1743885802799</updated>
++    </task>
++    <task id="LOCAL-00002" summary="Сделал работу галочки запомнить меня при регистрации">
++      <option name="closed" value="true" />
++      <created>1744998215826</created>
++      <option name="number" value="00002" />
++      <option name="presentableId" value="LOCAL-00002" />
++      <option name="project" value="LOCAL" />
++      <updated>1744998215826</updated>
++    </task>
++    <task id="LOCAL-00003" summary="Сделал просмотр профилей, добавил фозможность посмотреть профиль работодателя в поиске вакансий">
++      <option name="closed" value="true" />
++      <created>1745061119435</created>
++      <option name="number" value="00003" />
++      <option name="presentableId" value="LOCAL-00003" />
++      <option name="project" value="LOCAL" />
++      <updated>1745061119435</updated>
++    </task>
++    <task id="LOCAL-00004" summary="Добавил кнопку на главную на все страницы">
++      <option name="closed" value="true" />
++      <created>1745333517348</created>
++      <option name="number" value="00004" />
++      <option name="presentableId" value="LOCAL-00004" />
++      <option name="project" value="LOCAL" />
++      <updated>1745333517348</updated>
++    </task>
++    <task id="LOCAL-00005" summary="очень многа всивооо">
++      <option name="closed" value="true" />
++      <created>1746960703352</created>
++      <option name="number" value="00005" />
++      <option name="presentableId" value="LOCAL-00005" />
++      <option name="project" value="LOCAL" />
++      <updated>1746960703352</updated>
++    </task>
++    <task id="LOCAL-00006" summary="Подготовка к запуска">
++      <option name="closed" value="true" />
++      <created>1747056178844</created>
++      <option name="number" value="00006" />
++      <option name="presentableId" value="LOCAL-00006" />
++      <option name="project" value="LOCAL" />
++      <updated>1747056178844</updated>
++    </task>
++    <option name="localTasksCounter" value="7" />
+     <servers />
+   </component>
+   <component name="Vcs.Log.Tabs.Properties">
+@@ -107,7 +180,7 @@
+                   <entry key="branch">
+                     <value>
+                       <list>
+-                        <option value="HEAD" />
++                        <option value="origin/second_branch" />
+                       </list>
+                     </value>
+                   </entry>
+@@ -119,4 +192,21 @@
+       </map>
+     </option>
+   </component>
++  <component name="VcsManagerConfiguration">
++    <MESSAGE value="Сделал vacancy remove" />
++    <MESSAGE value="Сделал работу галочки запомнить меня при регистрации" />
++    <MESSAGE value="Сделал просмотр профилей, добавил фозможность посмотреть профиль работодателя в поиске вакансий" />
++    <MESSAGE value="Добавил кнопку на главную на все страницы" />
++    <MESSAGE value="очень многа всивооо" />
++    <MESSAGE value="Всё сделяно" />
++    <MESSAGE value="Подготовка к запуска" />
++    <option name="LAST_COMMIT_MESSAGE" value="Подготовка к запуска" />
++  </component>
++  <component name="XDebuggerManager">
++    <watches-manager>
++      <configuration name="PythonConfigurationType">
++        <watch expression="msg" />
++      </configuration>
++    </watches-manager>
++  </component>
+ </project>
+\ No newline at end of file
